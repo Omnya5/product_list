@@ -12,7 +12,7 @@
 </head>
 <body>
 <h3>Add product:</h3>
-<form action="addItem">
+<form action="addItem" method="post">
     <label for="name">Name of product:</label>
     <br>
     <input id="name" name="name" type="text" maxlength="40" pattern="[a-zA-Z]+">

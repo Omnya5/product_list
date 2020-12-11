@@ -1,15 +1,20 @@
 package pl.strzygowska.product_list.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 import pl.strzygowska.product_list.Item;
 import pl.strzygowska.product_list.ItemRepository;
 
 @RestController
 public class ItemController {
     @Autowired
-    ItemRepository itemData;
+    private ItemRepository itemData;
+    private final Logger logger = LoggerFactory.getLogger(ItemController.class);
+    private RedirectView redirectView = new RedirectView();
 
     @RequestMapping("/")
     public ModelAndView indexPage(){
@@ -19,42 +24,38 @@ public class ItemController {
     }
     @RequestMapping("/add")
     public ModelAndView addingPage(){
-        ModelAndView mv = new ModelAndView("add.jsp");
-        return mv;
+        return new ModelAndView("add.jsp");
     }
 
-    @RequestMapping("/add-del")
+    @RequestMapping("/update")
     public ModelAndView editPage(){
-        ModelAndView mv = new ModelAndView("add-del.jsp");
-       // mv.addObject("list", itemData.findAll());
-        return mv;
+        return new ModelAndView("update.jsp");
     }
+
     @RequestMapping("/addItem")
-    public ModelAndView addItem(Item item) {
+    public RedirectView addItem(Item item) {
         itemData.save(item);
-        return indexPage();
+        logger.info("added new item");
+        redirectView.setUrl("/");
+        return redirectView;
     }
 
     @RequestMapping("/editItem")
-    public ModelAndView editItem(Long id, String name, Double price) {
+    public RedirectView editItem(Long id, String name, Double price) {
         Item item =  itemData.findById(id).orElse(new Item());
         item.setName(name);
         item.setPrice(price);
         itemData.save(item);
-        return indexPage();
+        logger.info("item was edited");
+        redirectView.setUrl("/");
+        return redirectView;
     }
 
     @RequestMapping(value="/deleteItem", method={RequestMethod.DELETE, RequestMethod.GET})
-    public ModelAndView deleteItem(Long id) {
+    public RedirectView deleteItem(Long id) {
         itemData.deleteById(id);
-        return indexPage();
-    }
-
-    @RequestMapping("/getItem")
-    public ModelAndView getItem(Long id) {
-        Item item =  itemData.findById(id).orElse(new Item());
-        ModelAndView mv = new ModelAndView("newItem.jsp");
-        mv.addObject("item", item);
-        return mv;
+        logger.info("item was deleted");
+        redirectView.setUrl("/");
+        return redirectView;
     }
 }

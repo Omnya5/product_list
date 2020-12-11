@@ -15,10 +15,8 @@
 
 <h1 style="text-align: center">List of items</h1>
 
-<form action="/add" method="get" style="text-align: center">
-    <input type="submit" value="Add new product"/>
-</form>
 
+<a href="/add" style="text-align: center">Add new product</a>
     <div id="table">
         <table>
             <thead>
@@ -38,7 +36,7 @@
                     <td><c:out value="${item.name }"/></td>
                     <td><c:out value="${item.price }"/></td>
                     <td>
-                        <c:url var="editUrl" value="/add-del">
+                        <c:url var="editUrl" value="/update">
                             <c:param name="id" value="${item.id}"/>
                             <c:param name="name" value="${item.name}"/>
                             <c:param name="price" value="${item.price}"/>
@@ -58,16 +56,5 @@
         </table>
     </div>
     <br>
-
-    <div style="text-align: center;">
-        <h3>Find product:</h3>
-        <form action="getItem">
-            <label for="search">Id of product:</label>
-            <br>
-            <input id="search" name="id" type="number" maxlength="40">
-            <br>
-            <input type="submit" value="Submit">
-        </form>
-    </div>
 </body>
 </html>
